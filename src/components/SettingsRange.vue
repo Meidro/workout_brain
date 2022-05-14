@@ -1,6 +1,5 @@
 <template>
    <div class="range">
-      <h3>Настройки:</h3>
       <div class="range__item">
          <div class="badges">
             <span>1</span>
@@ -59,12 +58,9 @@
 </script>
 
 <style scoped>
-   h3 {
-      font-size: 21px;
-      margin-bottom: 20px;
-   }
    .range {
       width: 350px;
+      margin-bottom: 50px;
    }
    .badges {
       display: flex;

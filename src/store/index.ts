@@ -11,6 +11,7 @@ export default createStore({
          duration: 7,
          complexity: 3,
       },
+      checkboxValue: ['+'],
    },
    getters: {},
    mutations: {
@@ -19,6 +20,9 @@ export default createStore({
       },
       setSettings(state, settings) {
          state.settings = settings
+      },
+      setCheckboxValue(state, checkboxValue) {
+         state.checkboxValue = checkboxValue
       },
    },
    actions: {},
