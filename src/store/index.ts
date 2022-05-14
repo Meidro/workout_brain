@@ -8,7 +8,8 @@ export default createStore({
          totalAccuracy: 0,
       },
       settings: {
-         duration: 0,
+         duration: 7,
+         complexity: 3,
       },
    },
    getters: {},
@@ -16,8 +17,8 @@ export default createStore({
       setStatistics(state, statistics) {
          state.statistics = statistics
       },
-      setDuration(state, duration) {
-         state.settings.duration = duration
+      setSettings(state, settings) {
+         state.settings = settings
       },
    },
    actions: {},

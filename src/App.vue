@@ -27,7 +27,4 @@
    .mb-10 {
       margin-bottom: 10px;
    }
-   .mb-15 {
-      margin-bottom: 15px;
-   }
 </style>
