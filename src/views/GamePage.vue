@@ -1,15 +1,17 @@
 <template>
-   <div>game</div>
+   <RoundTimer />
 </template>
 
 <script lang="ts">
-   import {defineComponent} from 'vue'
+   import {defineComponent} from 'vue';
+   import RoundTimer from '@/components/RoundTimer.vue';
 
    export default defineComponent({
       setup() {
-         return {}
+         return {};
       },
-   })
+      components: {RoundTimer},
+   });
 </script>
 
 <style scoped></style>
