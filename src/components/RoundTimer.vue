@@ -16,10 +16,9 @@
          let intervalId: number | undefined;
 
          const timer = () => {
-            const countMinutes = num.value;
-            const deadlineTime = +new Date(new Date().getTime() + countMinutes * 60 * 1000 + 1000);
+            const deadlineTime = +new Date(new Date().getTime() + num.value * 60 * 1000 + 1000);
             intervalId = setInterval(() => {
-               console.log('fir');
+               console.log('tick');
                const moment = new Date().getTime();
                const restOfTime = deadlineTime - moment;
                minutes.value = Math.floor((restOfTime % (1000 * 60 * 60)) / (1000 * 60));

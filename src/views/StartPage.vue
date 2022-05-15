@@ -11,18 +11,28 @@
 </template>
 
 <script lang="ts">
-   import {defineComponent} from 'vue'
-   import CurrentTrainingDay from '@/components/CurrentTrainingDay.vue'
-   import DisplayStatistics from '@/components/DisplayStatistics.vue'
-   import SettingsRange from '@/components/SettingsRange.vue'
-   import SettingsCheckbox from '@/components/SettingsCheckbox.vue'
+   import {defineComponent} from 'vue';
+   import store from '@/store';
+   import CurrentTrainingDay from '@/components/CurrentTrainingDay.vue';
+   import DisplayStatistics from '@/components/DisplayStatistics.vue';
+   import SettingsRange from '@/components/SettingsRange.vue';
+   import SettingsCheckbox from '@/components/SettingsCheckbox.vue';
 
    export default defineComponent({
       setup() {
-         return {}
+         const settingsRangeStr = localStorage.getItem('settingsRange');
+         if (settingsRangeStr) {
+            store.commit('setSettings', JSON.parse(settingsRangeStr));
+         }
+
+         const checkboxsStr = localStorage.getItem('checkbox');
+         if (checkboxsStr) {
+            store.commit('setCheckboxValue', JSON.parse(checkboxsStr));
+         }
+         return {};
       },
       components: {CurrentTrainingDay, DisplayStatistics, SettingsRange, SettingsCheckbox},
-   })
+   });
 </script>
 
 <style scoped>

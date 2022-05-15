@@ -24,37 +24,27 @@
 </template>
 
 <script lang="ts">
-   import {defineComponent, ref, onMounted, watch} from 'vue'
-   import store from '@/store'
+   import {defineComponent, ref, watch, computed} from 'vue';
+   import store from '@/store';
 
    export default defineComponent({
       setup() {
-         const settings = ref({
-            duration: 7,
-            complexity: 3,
-         })
+         const settings = ref(computed(() => store.state.settings).value);
 
          watch(
             () => settings.value,
             () => {
-               store.commit('setSettings', settings.value)
-               localStorage.setItem('settingsRange', JSON.stringify(settings.value))
+               store.commit('setSettings', settings.value);
+               localStorage.setItem('settingsRange', JSON.stringify(settings.value));
             },
             {deep: true}
-         )
+         );
 
-         onMounted(() => {
-            const settingsRangeStr = localStorage.getItem('settingsRange')
-            if (settingsRangeStr) {
-               const settingsRange = JSON.parse(settingsRangeStr)
-               settings.value = settingsRange
-            }
-         })
          return {
             settings,
-         }
+         };
       },
-   })
+   });
 </script>
 
 <style scoped>
