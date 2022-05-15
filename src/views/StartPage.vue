@@ -56,5 +56,6 @@
       width: 120px;
       margin: 0 auto;
       box-shadow: 3px 3px 6px #777;
+      cursor: pointer;
    }
 </style>

@@ -11,8 +11,12 @@
       setup() {
          const settingsRangeStr = localStorage.getItem('settingsRange');
          if (settingsRangeStr) {
-            const settingsRange = JSON.parse(settingsRangeStr);
-            store.commit('setSettings', settingsRange);
+            store.commit('setSettings', JSON.parse(settingsRangeStr));
+         }
+
+         const checkboxsStr = localStorage.getItem('checkbox');
+         if (checkboxsStr) {
+            store.commit('setCheckboxValue', JSON.parse(checkboxsStr));
          }
 
          return {};

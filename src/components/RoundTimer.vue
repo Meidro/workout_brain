@@ -1,5 +1,8 @@
 <template>
-   <div>{{ minutes }} : {{ seconds }}</div>
+   <div class="timer">
+      <button class="btn" @click="$router.push('/')"><span>Отмена</span></button>
+      <div class="timer__item">{{ minutes }} : {{ seconds }}</div>
+   </div>
 </template>
 
 <script lang="ts">
@@ -48,4 +51,33 @@
    });
 </script>
 
-<style scoped></style>
+<style scoped>
+   .timer {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+   }
+   .btn {
+      text-align: center;
+   }
+   button {
+      padding: 10px 0;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 2px;
+      display: inline-block;
+      width: 120px;
+      box-shadow: 3px 3px 6px #777;
+      cursor: pointer;
+   }
+   .timer__item {
+      padding: 10px 0;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 2px;
+      box-shadow: 3px 3px 6px #777;
+      width: 120px;
+      text-align: center;
+      border: 3px solid #00bfff;
+   }
+</style>
