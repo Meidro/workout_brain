@@ -1,11 +1,13 @@
 <template>
    <RoundTimer />
+   <ShowExpression />
 </template>
 
 <script lang="ts">
    import {defineComponent} from 'vue';
    import RoundTimer from '@/components/RoundTimer.vue';
    import store from '@/store';
+   import ShowExpression from '@/components/ShowExpression.vue';
 
    export default defineComponent({
       setup() {
@@ -21,7 +23,7 @@
 
          return {};
       },
-      components: {RoundTimer},
+      components: {RoundTimer, ShowExpression},
    });
 </script>
 
