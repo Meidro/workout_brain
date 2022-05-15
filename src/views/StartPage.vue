@@ -6,7 +6,7 @@
    <SettingsRange />
    <SettingsCheckbox />
    <div class="btn">
-      <button>Play!</button>
+      <button @click="$router.push('/game')">Play!</button>
    </div>
 </template>
 

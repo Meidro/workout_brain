@@ -1,17 +1,16 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
-
 import StartPage from '@/views/StartPage.vue'
+import GamePage from '@/views/GamePage.vue'
 
 const routes: Array<RouteRecordRaw> = [
    {
       path: '/',
       component: StartPage,
    },
-   // {
-   //   path: '/about',
-   //   name: 'about',
-   //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-   // }
+   {
+      path: '/game',
+      component: GamePage,
+   },
 ]
 
 const router = createRouter({
