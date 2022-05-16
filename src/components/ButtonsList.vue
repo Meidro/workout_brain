@@ -20,75 +20,70 @@
 </template>
 
 <script lang="ts">
-   import {defineComponent, computed, ref, onMounted, onBeforeUnmount} from 'vue';
-   import OperatorButton from '@/components/OperatorButton.vue';
-   import store from '@/store';
-   import {useCalculateResult} from '@/use/helpers';
+   import {defineComponent, computed, ref, onMounted, onUnmounted} from 'vue'
+   import OperatorButton from '@/components/OperatorButton.vue'
+   import store from '@/store'
+   import {useCalculateResult} from '@/use/helpers'
 
    export default defineComponent({
       setup() {
-         const numbersBtns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-         const operatorsBtns = ['<', '>', '?', '='];
+         const numbersBtns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+         const operatorsBtns = ['<', '>', '?', '=']
 
-         const inputsRefs = computed(() => store.state.inputsRefs);
-         const displayedTask = computed(() => store.state.displayedTask);
-         const inputsValues = computed(() => store.state.inputsValues);
-         const taskResult = computed(() => store.state.taskResult);
-         const inputIndex = ref(0);
-         const showModal = ref(false);
+         const inputsRefs = computed(() => store.state.inputsRefs)
+         const displayedTask = computed(() => store.state.displayedTask)
+         const inputsValues = computed(() => store.state.inputsValues)
+         const taskResult = computed(() => store.state.taskResult)
+         const inputIndex = ref(0)
+         const showModal = ref(false)
 
          const compareResult = () => {
-            const withEnteredValuesTask = [...displayedTask.value];
+            const withEnteredValuesTask = [...displayedTask.value]
             withEnteredValuesTask.forEach((el, i, arr) => {
                if (!el) {
-                  arr[i] = inputsValues.value[i];
+                  arr[i] = inputsValues.value[i]
                }
-            });
+            })
 
             if (
                useCalculateResult(withEnteredValuesTask.slice(0, displayedTask.value.length - 2)) === taskResult.value
             ) {
-               showModal.value = true;
+               showModal.value = true
             }
-         };
+         }
 
          const onNumberBtnClick = (e: Event) => {
-            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value];
-            currentInput.value += (e.target as HTMLButtonElement).innerText;
-            currentInput.dispatchEvent(new Event('input'));
-            currentInput.focus();
-         };
+            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value]
+            currentInput.value += (e.target as HTMLButtonElement).innerText
+            currentInput.dispatchEvent(new Event('input'))
+            currentInput.focus()
+         }
 
          const onOperBtnClick = (e: Event) => {
-            const innerText = (e.target as HTMLButtonElement).innerText;
+            const innerText = (e.target as HTMLButtonElement).innerText
             if (innerText === '>' && inputIndex.value < inputsRefs.value.length - 1) {
-               inputIndex.value++;
+               inputIndex.value++
             }
             if (innerText === '<' && inputIndex.value > 0) {
-               inputIndex.value--;
+               inputIndex.value--
             }
             if (innerText === '=') {
-               compareResult();
+               compareResult()
             }
-            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value];
-            currentInput.focus();
-         };
-
-         const toggleInputIndex = () => inputIndex.value;
+            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value]
+            currentInput.focus()
+         }
 
          onMounted(() => {
-            (inputsRefs.value[inputIndex.value] as HTMLInputElement).focus();
+            const inputs: HTMLInputElement = inputsRefs.value[inputIndex.value]
+            inputs.focus()
 
             inputsRefs.value.forEach((input: HTMLInputElement, i) => {
-               input.onfocus = toggleInputIndex;
-            });
-         });
-
-         onBeforeUnmount(() => {
-            inputsRefs.value.forEach((input: HTMLInputElement, i) => {
-               input.onfocus = null;
-            });
-         });
+               input.addEventListener('focus', () => {
+                  inputIndex.value = i
+               })
+            })
+         })
 
          return {
             numbersBtns,
@@ -96,10 +91,10 @@
             showModal,
             onNumberBtnClick,
             onOperBtnClick,
-         };
+         }
       },
       components: {OperatorButton},
-   });
+   })
 </script>
 
 <style scoped>

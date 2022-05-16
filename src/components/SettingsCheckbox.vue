@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts">
-   import {defineComponent, ref, watch, computed} from 'vue';
-   import store from '@/store';
+   import {defineComponent, ref, watch, computed} from 'vue'
+   import store from '@/store'
 
    export default defineComponent({
       setup() {
@@ -19,25 +19,25 @@
             {value: '*', label: 'Умножение'},
             {value: '/', label: 'Деление'},
             {value: '**', label: 'Возведение в степень'},
-         ];
+         ]
 
-         const checkboxsValue = ref(computed(() => store.state.checkboxValue).value);
+         const checkboxsValue = ref(computed(() => store.state.checkboxValue).value)
 
          watch(
             () => checkboxsValue.value,
             () => {
-               store.commit('setCheckboxValue', checkboxsValue.value);
-               localStorage.setItem('checkbox', JSON.stringify(checkboxsValue.value));
+               store.commit('setCheckboxValue', checkboxsValue.value)
+               localStorage.setItem('checkbox', JSON.stringify(checkboxsValue.value))
             },
             {deep: true}
-         );
+         )
 
          return {
             checkboxs,
             checkboxsValue,
-         };
+         }
       },
-   });
+   })
 </script>
 
 <style scoped>
