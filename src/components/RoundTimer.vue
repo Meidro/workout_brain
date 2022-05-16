@@ -56,6 +56,7 @@
       display: flex;
       justify-content: space-between;
       padding: 20px;
+      margin-bottom: 50px;
    }
    .btn {
       text-align: center;
