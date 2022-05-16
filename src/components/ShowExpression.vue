@@ -8,20 +8,25 @@
 </template>
 
 <script lang="ts">
-   import {defineComponent, computed, ref} from 'vue';
+   import {defineComponent, computed, ref, onMounted} from 'vue';
    import store from '@/store';
    import {useCalculateResult} from '@/use/calculateResult';
 
    export default defineComponent({
       setup() {
-         const checkboxData = computed(() => store.state.checkboxValue);
+         const checkboxValue = computed(() => store.state.checkboxValue);
          const level = computed(() => store.state.settings.complexity);
          const displayExp = computed(() => store.state.displayExpression);
          const userInput = computed(() => store.state.userInput);
          const currentResult = computed(() => store.state.currentResult);
 
+         const inputs = ref(null);
          const showModal = ref(false);
-         const inputIndex = ref(0);
+
+         onMounted(() => {
+            console.log(inputs.value);
+            store.commit('setInputRef', inputs.value);
+         });
 
          const getRandomElement = (arr: (string | number)[]) => {
             return arr[Math.floor(Math.random() * arr.length)];
@@ -51,27 +56,6 @@
             }
          };
 
-         const onNumberBtnClick = (e: Event, refs: any) => {
-            const currentInput = refs.inputs[inputIndex.value];
-            currentInput.value += (e.target as HTMLButtonElement).innerText;
-            currentInput.dispatchEvent(new Event('input'));
-            currentInput.focus();
-         };
-
-         const onOperBtnClick = (e: Event, refs: any) => {
-            const innerText = (e.target as HTMLButtonElement).innerText;
-            if (innerText === '>' && inputIndex.value < refs.inputs.length - 1) {
-               inputIndex.value++;
-            }
-            if (innerText === '<' && inputIndex.value > 0) {
-               inputIndex.value--;
-            }
-            if (innerText === '=') {
-               compareResult();
-            }
-            refs.inputs[inputIndex.value].focus();
-         };
-
          const generateExpressionElements = (checkboxData: string[], expressionLength: number) => {
             const result = [];
             for (let i = 0; i < expressionLength; i++) {
@@ -95,14 +79,11 @@
             return result;
          };
 
-         const expressionElements = generateExpressionElements(checkboxData.value, 2 * level.value + 1);
+         const expressionElements = generateExpressionElements(checkboxValue.value, 2 * level.value + 1);
          store.commit('setExpressionElements', expressionElements);
 
          const result = useCalculateResult(expressionElements);
          store.commit('setCurrentResult', result);
-
-         // const fullExpression = [...expressionElements, '=', result];
-         // store.commit('setFullExpression', fullExpression);
 
          const displayExpression = [...expressionElements, '=', result].map((el, i, arr) => {
             if (i === 0 || i === arr.length - 1 || typeof el === 'string') return el;
@@ -114,8 +95,7 @@
             displayExp,
             userInput,
             showModal,
-            onOperBtnClick,
-            onNumberBtnClick,
+            inputs,
          };
       },
    });
@@ -133,9 +113,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-bottom: 100px;
    }
    .element {
-      margin-right: 5px;
+      margin-right: 7px;
       text-align: center;
    }
    .modal {

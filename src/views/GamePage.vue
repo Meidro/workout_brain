@@ -1,6 +1,7 @@
 <template>
    <RoundTimer />
    <ShowExpression />
+   <ButtonsList />
 </template>
 
 <script lang="ts">
@@ -8,6 +9,7 @@
    import RoundTimer from '@/components/RoundTimer.vue';
    import store from '@/store';
    import ShowExpression from '@/components/ShowExpression.vue';
+   import ButtonsList from '@/components/ButtonsList.vue';
 
    export default defineComponent({
       setup() {
@@ -23,7 +25,7 @@
 
          return {};
       },
-      components: {RoundTimer, ShowExpression},
+      components: {RoundTimer, ShowExpression, ButtonsList},
    });
 </script>
 

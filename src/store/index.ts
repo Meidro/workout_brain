@@ -17,6 +17,7 @@ export default createStore({
       userResult: [],
       currentResult: 0,
       expressionElements: [],
+      inputsRefs: [],
    },
    getters: {},
    mutations: {
@@ -40,6 +41,9 @@ export default createStore({
       },
       setExpressionElements(state, payload) {
          state.expressionElements = payload;
+      },
+      setInputRef(state, inputs) {
+         state.inputsRefs = inputs;
       },
    },
    actions: {},
