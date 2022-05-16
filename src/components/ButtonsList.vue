@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-   import {defineComponent, computed, ref, onMounted} from 'vue';
+   import {defineComponent, computed, ref, onMounted, onBeforeUnmount} from 'vue';
    import OperatorButton from '@/components/OperatorButton.vue';
    import store from '@/store';
    import {useCalculateResult} from '@/use/helpers';
@@ -74,8 +74,20 @@
             currentInput.focus();
          };
 
+         const toggleInputIndex = () => inputIndex.value;
+
          onMounted(() => {
             (inputsRefs.value[inputIndex.value] as HTMLInputElement).focus();
+
+            inputsRefs.value.forEach((input: HTMLInputElement, i) => {
+               input.onfocus = toggleInputIndex;
+            });
+         });
+
+         onBeforeUnmount(() => {
+            inputsRefs.value.forEach((input: HTMLInputElement, i) => {
+               input.onfocus = null;
+            });
          });
 
          return {
