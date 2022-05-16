@@ -12,12 +12,10 @@ export default createStore({
          complexity: 3,
       },
       checkboxValue: ['+'],
-      displayExpression: [],
-      userInput: [],
-      userResult: [],
-      currentResult: 0,
-      expressionElements: [],
+      displayedTask: [],
+      taskResult: 0,
       inputsRefs: [],
+      inputsValues: [],
    },
    getters: {},
    mutations: {
@@ -30,20 +28,19 @@ export default createStore({
       setCheckboxValue(state, checkboxValue) {
          state.checkboxValue = checkboxValue;
       },
-      setDisplayExpression(state, payload) {
-         state.displayExpression = payload;
+      setDisplayedTask(state, displayedTask) {
+         state.displayedTask = displayedTask;
       },
-      setUserResult(state, payload) {
-         state.userResult = payload;
+
+      setTaskResult(state, taskResult) {
+         state.taskResult = taskResult;
       },
-      setCurrentResult(state, payload) {
-         state.currentResult = payload;
-      },
-      setExpressionElements(state, payload) {
-         state.expressionElements = payload;
-      },
-      setInputRef(state, inputs) {
+
+      setInputsRef(state, inputs) {
          state.inputsRefs = inputs;
+      },
+      setInputsValues(state, inputsValues) {
+         state.inputsValues = inputsValues;
       },
    },
    actions: {},
