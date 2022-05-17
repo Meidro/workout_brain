@@ -50,6 +50,8 @@
          const compareResult = () => {
             if (useCalculateResult(store.getters.withEnteredValuesTask) === taskResult.value) {
                typeModal.value = 'correct';
+               store.commit('incCompletedExamples');
+               store.commit('incCompletedExamplesRound');
             } else {
                typeModal.value = 'no-correct';
             }

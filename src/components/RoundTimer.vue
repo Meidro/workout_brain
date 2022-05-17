@@ -1,6 +1,6 @@
 <template>
    <div class="timer">
-      <button class="btn" @click="$router.push('/')"><span>Отмена</span></button>
+      <button class="btn" @click="cancel"><span>Отмена</span></button>
       <div class="timer__item">{{ minutes }} : {{ seconds }}</div>
    </div>
 </template>
@@ -21,7 +21,6 @@
          const timer = () => {
             const deadlineTime = +new Date(new Date().getTime() + num.value * 60 * 1000 + 1000);
             intervalId = setInterval(() => {
-               console.log('tick');
                const moment = new Date().getTime();
                const restOfTime = deadlineTime - moment;
                minutes.value = Math.floor((restOfTime % (1000 * 60 * 60)) / (1000 * 60));
@@ -35,6 +34,12 @@
             }, 1000);
          };
 
+         const cancel = () => {
+            router.push('/');
+            store.commit('decTotalExamples');
+            store.commit('decTotalExamplesRound');
+         };
+
          onMounted(() => {
             timer();
          });
@@ -46,6 +51,7 @@
          return {
             minutes,
             seconds,
+            cancel,
          };
       },
    });

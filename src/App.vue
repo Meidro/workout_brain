@@ -28,7 +28,7 @@
       margin-bottom: 10px;
    }
    .element input {
-      max-width: 45px;
+      max-width: 50px;
       font-weight: 700;
       font-size: 28px;
       border: none;

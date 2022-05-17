@@ -4,8 +4,12 @@ export default createStore({
    state: {
       statistics: {
          totalExamples: 0,
-         lastResult: 0,
-         totalAccuracy: 0,
+         completedExamples: 0,
+
+         lastRound: {
+            totalExamplesRound: 0,
+            completedExamplesRound: 0,
+         },
       },
       settings: {
          duration: 7,
@@ -54,6 +58,33 @@ export default createStore({
       resetInputsValues(state) {
          state.inputsValues = [];
       },
+
+      // ==================================================
+      incTotalExamples(state) {
+         state.statistics.totalExamples++;
+      },
+
+      decTotalExamples(state) {
+         state.statistics.totalExamples--;
+      },
+
+      incTotalExamplesRound(state) {
+         state.statistics.lastRound.totalExamplesRound++;
+      },
+
+      decTotalExamplesRound(state) {
+         state.statistics.lastRound.totalExamplesRound--;
+      },
+
+      // =====================================
+
+      incCompletedExamples(state) {
+         state.statistics.completedExamples++;
+      },
+
+      incCompletedExamplesRound(state) {
+         state.statistics.lastRound.completedExamplesRound++;
+      },
    },
    getters: {
       withEnteredValuesTask(state) {
@@ -64,6 +95,14 @@ export default createStore({
             }
          });
          return temp.slice(0, state.displayedTask.length - 2);
+      },
+
+      totalAccuracy(state) {
+         if (state.statistics.totalExamples !== 0) {
+            return (state.statistics.completedExamples / state.statistics.totalExamples) * 100;
+         } else {
+            return 0;
+         }
       },
    },
 });

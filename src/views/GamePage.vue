@@ -45,15 +45,14 @@
             store.commit('setTaskResult', taskResult);
             store.commit('setDisplayedTask', displayedTask);
             store.commit('setCorrectValues', correctValues);
-
-            return displayedTask;
+            store.commit('incTotalExamples');
+            store.commit('incTotalExamplesRound');
          };
 
-         const displayedTask = start();
+         start();
 
          return {
             start,
-            displayedTask,
          };
       },
       components: {RoundTimer, ShowExpression, ButtonsList},
