@@ -51,6 +51,9 @@ export default createStore({
       setCorrectValues(state, correctValues) {
          state.correctValues = correctValues;
       },
+      resetInputsValues(state) {
+         state.inputsValues = [];
+      },
    },
    getters: {
       withEnteredValuesTask(state) {

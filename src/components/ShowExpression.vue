@@ -10,13 +10,11 @@
 <script lang="ts">
    import {defineComponent, computed, ref, onMounted, watch} from 'vue';
    import store from '@/store';
-   import {useCalculateResult, useGenerateTaskElements} from '@/use/helpers';
 
    export default defineComponent({
       setup() {
-         const checkboxsValue = computed(() => store.state.checkboxValue);
-         const level = computed(() => store.state.settings.complexity).value * 2 + 1;
-         const inputsValues = ref([]);
+         const displayedTask = computed(() => store.state.displayedTask);
+         const inputsValues = computed(() => store.state.inputsValues);
          const inputsRef = ref(null);
 
          watch(
@@ -24,25 +22,6 @@
             () => store.commit('setInputsValues', inputsValues.value),
             {deep: true}
          );
-
-         const taskElements = useGenerateTaskElements(checkboxsValue.value, level);
-         console.log(taskElements);
-         const taskResult = useCalculateResult(taskElements);
-         let displayedTask = [];
-         let correctValues = [];
-         for (let i = 0; i < taskElements.length; i++) {
-            if (i !== 0 && typeof taskElements[i] === 'number') {
-               displayedTask.push(undefined);
-               correctValues.push(taskElements[i]);
-            } else {
-               displayedTask.push(taskElements[i]);
-            }
-         }
-         displayedTask.push('=', taskResult);
-
-         store.commit('setTaskResult', taskResult);
-         store.commit('setDisplayedTask', displayedTask);
-         store.commit('setCorrectValues', correctValues);
 
          onMounted(() => {
             store.commit('setInputsRef', inputsRef.value);

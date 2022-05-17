@@ -11,17 +11,20 @@
          }}</OperatorButton>
       </div>
    </div>
+
    <ModalWindow v-if="typeModal === 'correct'">
       <p class="correct">Это верный ответ!:)</p>
-      <button @click="typeModal = ''">Следующий пример</button>
+      <button @click="nextTask">Следующий пример</button>
    </ModalWindow>
+
    <ModalWindow v-if="typeModal === 'result'">
       <p>Переход к следующему примеру</p>
-      <button @click="typeModal = ''">Перейти</button>
+      <button @click="nextTask">Перейти</button>
    </ModalWindow>
+
    <ModalWindow v-if="typeModal === 'no-correct'">
       <p class="no-correct">Неверный ответ :(</p>
-      <button @click="typeModal = ''">Попробовать ещё раз</button>
+      <button @click="nextTask">Переход к следующему примеру</button>
    </ModalWindow>
 </template>
 
@@ -33,7 +36,8 @@
    import ModalWindow from './ModalWindow.vue';
 
    export default defineComponent({
-      setup() {
+      emits: ['startApp'],
+      setup(props, {emit}) {
          const numbersBtns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
          const operatorsBtns = ['<', '>', '?', '='];
 
@@ -83,6 +87,14 @@
             currentInput.focus();
          };
 
+         const nextTask = () => {
+            emit('startApp');
+            typeModal.value = '';
+            store.commit('resetInputsValues');
+            const currentInput: HTMLInputElement = inputsRefs.value[0];
+            currentInput.focus();
+         };
+
          onMounted(() => {
             const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value];
             currentInput.focus();
@@ -100,6 +112,7 @@
             typeModal,
             onNumberBtnClick,
             onOperBtnClick,
+            nextTask,
          };
       },
       components: {OperatorButton, ModalWindow},
@@ -125,10 +138,10 @@
       margin-left: 20px;
    }
    .modal p {
-      letter-spacing: 0.2px;
+      letter-spacing: 1.5px;
       line-height: 24px;
-      font-size: 20px;
-      font-weight: 400;
+      font-size: 28px;
+      font-weight: 600;
       color: #213547;
       margin-bottom: 20px;
    }
@@ -137,7 +150,7 @@
       padding: 7px 16px;
       border: 1px solid rgba(60, 60, 60, 0.29);
       border-radius: 8px;
-      font-size: 0.9em;
+      font-size: 1em;
       font-weight: 600;
       cursor: pointer;
    }
