@@ -1,7 +1,7 @@
 <template>
    <div class="expression-wrapper">
       <div v-for="(el, i) in displayedTask" :key="i" class="element">
-         <span v-if="el">{{ el }}</span>
+         <span v-if="el !== undefined">{{ el }}</span>
          <input v-else type="number" v-model="inputsValues[i]" ref="inputsRef" />
       </div>
    </div>
@@ -26,15 +26,23 @@
          );
 
          const taskElements = useGenerateTaskElements(checkboxsValue.value, level);
-
+         console.log(taskElements);
          const taskResult = useCalculateResult(taskElements);
-         store.commit('setTaskResult', taskResult);
+         let displayedTask = [];
+         let correctValues = [];
+         for (let i = 0; i < taskElements.length; i++) {
+            if (i !== 0 && typeof taskElements[i] === 'number') {
+               displayedTask.push(undefined);
+               correctValues.push(taskElements[i]);
+            } else {
+               displayedTask.push(taskElements[i]);
+            }
+         }
+         displayedTask.push('=', taskResult);
 
-         const displayedTask = [...taskElements, '=', taskResult].map((el, i, arr) => {
-            if (i === 0 || i === arr.length - 1 || typeof el === 'string') return el;
-            else undefined;
-         });
+         store.commit('setTaskResult', taskResult);
          store.commit('setDisplayedTask', displayedTask);
+         store.commit('setCorrectValues', correctValues);
 
          onMounted(() => {
             store.commit('setInputsRef', inputsRef.value);

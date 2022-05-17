@@ -11,90 +11,99 @@
          }}</OperatorButton>
       </div>
    </div>
-   <Teleport to="body">
-      <div v-if="showModal" class="modal">
-         <p>Верно!</p>
-         <button @click="showModal = false">Close</button>
-      </div>
-   </Teleport>
+   <ModalWindow v-if="typeModal === 'correct'">
+      <p class="correct">Это верный ответ!:)</p>
+      <button @click="typeModal = ''">Следующий пример</button>
+   </ModalWindow>
+   <ModalWindow v-if="typeModal === 'result'">
+      <p>Переход к следующему примеру</p>
+      <button @click="typeModal = ''">Перейти</button>
+   </ModalWindow>
+   <ModalWindow v-if="typeModal === 'no-correct'">
+      <p class="no-correct">Неверный ответ :(</p>
+      <button @click="typeModal = ''">Попробовать ещё раз</button>
+   </ModalWindow>
 </template>
 
 <script lang="ts">
-   import {defineComponent, computed, ref, onMounted, onUnmounted} from 'vue'
-   import OperatorButton from '@/components/OperatorButton.vue'
-   import store from '@/store'
-   import {useCalculateResult} from '@/use/helpers'
+   import {defineComponent, computed, ref, onMounted} from 'vue';
+   import OperatorButton from '@/components/OperatorButton.vue';
+   import store from '@/store';
+   import {useCalculateResult} from '@/use/helpers';
+   import ModalWindow from './ModalWindow.vue';
 
    export default defineComponent({
       setup() {
-         const numbersBtns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-         const operatorsBtns = ['<', '>', '?', '=']
+         const numbersBtns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+         const operatorsBtns = ['<', '>', '?', '='];
 
-         const inputsRefs = computed(() => store.state.inputsRefs)
-         const displayedTask = computed(() => store.state.displayedTask)
-         const inputsValues = computed(() => store.state.inputsValues)
-         const taskResult = computed(() => store.state.taskResult)
-         const inputIndex = ref(0)
-         const showModal = ref(false)
+         const inputsRefs = computed(() => store.state.inputsRefs);
+         const taskResult = computed(() => store.state.taskResult);
+         const correctValues = computed(() => store.state.correctValues);
+         const inputIndex = ref(0);
+         const typeModal = ref('');
 
          const compareResult = () => {
-            const withEnteredValuesTask = [...displayedTask.value]
-            withEnteredValuesTask.forEach((el, i, arr) => {
-               if (!el) {
-                  arr[i] = inputsValues.value[i]
-               }
-            })
-
-            if (
-               useCalculateResult(withEnteredValuesTask.slice(0, displayedTask.value.length - 2)) === taskResult.value
-            ) {
-               showModal.value = true
+            if (useCalculateResult(store.getters.withEnteredValuesTask) === taskResult.value) {
+               typeModal.value = 'correct';
+            } else {
+               typeModal.value = 'no-correct';
             }
-         }
+         };
+
+         const showCorrectValues = () => {
+            inputsRefs.value.forEach((input: HTMLInputElement, i) => {
+               input.value = correctValues.value[i];
+            });
+            typeModal.value = 'result';
+         };
 
          const onNumberBtnClick = (e: Event) => {
-            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value]
-            currentInput.value += (e.target as HTMLButtonElement).innerText
-            currentInput.dispatchEvent(new Event('input'))
-            currentInput.focus()
-         }
+            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value];
+            currentInput.value += (e.target as HTMLButtonElement).innerText;
+            currentInput.dispatchEvent(new Event('input'));
+            currentInput.focus();
+         };
 
          const onOperBtnClick = (e: Event) => {
-            const innerText = (e.target as HTMLButtonElement).innerText
+            const innerText = (e.target as HTMLButtonElement).innerText;
             if (innerText === '>' && inputIndex.value < inputsRefs.value.length - 1) {
-               inputIndex.value++
+               inputIndex.value++;
             }
             if (innerText === '<' && inputIndex.value > 0) {
-               inputIndex.value--
+               inputIndex.value--;
             }
             if (innerText === '=') {
-               compareResult()
+               compareResult();
             }
-            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value]
-            currentInput.focus()
-         }
+            if (innerText === '?') {
+               showCorrectValues();
+            }
+            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value];
+            currentInput.focus();
+         };
 
          onMounted(() => {
-            const inputs: HTMLInputElement = inputsRefs.value[inputIndex.value]
-            inputs.focus()
+            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value];
+            currentInput.focus();
 
             inputsRefs.value.forEach((input: HTMLInputElement, i) => {
                input.addEventListener('focus', () => {
-                  inputIndex.value = i
-               })
-            })
-         })
+                  inputIndex.value = i;
+               });
+            });
+         });
 
          return {
             numbersBtns,
             operatorsBtns,
-            showModal,
+            typeModal,
             onNumberBtnClick,
             onOperBtnClick,
-         }
+         };
       },
-      components: {OperatorButton},
-   })
+      components: {OperatorButton, ModalWindow},
+   });
 </script>
 
 <style scoped>
@@ -115,32 +124,27 @@
       gap: 40px;
       margin-left: 20px;
    }
-   .modal {
-      position: fixed;
-      z-index: 999;
-      top: 20%;
-      left: 50%;
-      width: 300px;
-      margin-left: -150px;
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 16px #00000026;
-   }
    .modal p {
       letter-spacing: 0.2px;
       line-height: 24px;
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 400;
       color: #213547;
       margin-bottom: 20px;
    }
    .modal button {
       background-color: #f1f1f1;
-      padding: 5px 12px;
+      padding: 7px 16px;
       border: 1px solid rgba(60, 60, 60, 0.29);
       border-radius: 8px;
       font-size: 0.9em;
       font-weight: 600;
+      cursor: pointer;
+   }
+   .modal .correct {
+      color: #03c03c;
+   }
+   .modal .no-correct {
+      color: red;
    }
 </style>

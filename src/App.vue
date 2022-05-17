@@ -17,7 +17,7 @@
       font-weight: 700;
    }
    .app-wrapper {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
    }
    span.changing_data {
