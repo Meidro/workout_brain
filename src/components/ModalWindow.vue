@@ -9,13 +9,13 @@
 </template>
 
 <script lang="ts">
-   import {defineComponent} from 'vue';
+   import {defineComponent} from 'vue'
 
    export default defineComponent({
       setup() {
-         return {};
+         return {}
       },
-   });
+   })
 </script>
 
 <style scoped>
@@ -39,7 +39,5 @@
       box-shadow: 0 4px 16px #00000026;
       text-align: center;
       background-color: rgb(242, 243, 244);
-      position: relative;
-      top: -300px;
    }
 </style>
