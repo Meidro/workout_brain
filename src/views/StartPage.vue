@@ -11,45 +11,45 @@
 </template>
 
 <script lang="ts">
-   import {defineComponent, computed} from 'vue'
-   import store from '@/store'
-   import CurrentTrainingDay from '@/components/CurrentTrainingDay.vue'
-   import DisplayStatistics from '@/components/DisplayStatistics.vue'
-   import SettingsRange from '@/components/SettingsRange.vue'
-   import SettingsCheckbox from '@/components/SettingsCheckbox.vue'
-   import router from '@/router'
+   import {defineComponent, computed} from 'vue';
+   import store from '@/store';
+   import CurrentTrainingDay from '@/components/CurrentTrainingDay.vue';
+   import DisplayStatistics from '@/components/DisplayStatistics.vue';
+   import SettingsRange from '@/components/SettingsRange.vue';
+   import SettingsCheckbox from '@/components/SettingsCheckbox.vue';
+   import router from '@/router';
 
    export default defineComponent({
       setup() {
-         const statisticsStr = localStorage.getItem('statistics')
+         const statisticsStr = localStorage.getItem('statistics');
          if (statisticsStr) {
-            store.commit('setStatistics', JSON.parse(statisticsStr))
+            store.commit('setStatistics', JSON.parse(statisticsStr));
          }
 
-         const settingsRangeStr = localStorage.getItem('settingsRange')
+         const settingsRangeStr = localStorage.getItem('settingsRange');
          if (settingsRangeStr) {
-            store.commit('setSettings', JSON.parse(settingsRangeStr))
+            store.commit('setSettings', JSON.parse(settingsRangeStr));
          }
 
-         const checkboxsStr = localStorage.getItem('checkbox')
+         const checkboxsStr = localStorage.getItem('checkbox');
          if (checkboxsStr) {
-            store.commit('setCheckboxValue', JSON.parse(checkboxsStr))
+            store.commit('setCheckboxValue', JSON.parse(checkboxsStr));
          }
 
-         const statistics = computed(() => store.state.statistics)
+         const statistics = computed(() => store.state.statistics);
 
          const play = () => {
-            router.push('/game')
-            store.commit('resetTotalExamplesRound')
-            store.commit('resetCompletedExamplesRaund')
-            localStorage.setItem('statistics', JSON.stringify(statistics.value))
-         }
+            router.push('/game');
+            store.commit('resetTotalExamplesRound');
+            store.commit('resetCompletedExamplesRaund');
+            localStorage.setItem('statistics', JSON.stringify(statistics.value));
+         };
          return {
             play,
-         }
+         };
       },
       components: {CurrentTrainingDay, DisplayStatistics, SettingsRange, SettingsCheckbox},
-   })
+   });
 </script>
 
 <style scoped>

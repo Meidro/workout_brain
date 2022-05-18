@@ -29,86 +29,94 @@
 </template>
 
 <script lang="ts">
-   import {defineComponent, computed, ref, onMounted} from 'vue'
-   import OperatorButton from '@/components/OperatorButton.vue'
-   import store from '@/store'
-   import {useCalculateResult} from '@/use/helpers'
-   import ModalWindow from './ModalWindow.vue'
+   import {defineComponent, computed, ref, onMounted} from 'vue';
+   import OperatorButton from '@/components/OperatorButton.vue';
+   import store from '@/store';
+   import {useCalculateResult} from '@/use/helpers';
+   import ModalWindow from './ModalWindow.vue';
 
    export default defineComponent({
       emits: ['startApp'],
       setup(props, {emit}) {
-         const numbersBtns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-         const operatorsBtns = ['<', '>', '?', '=']
+         const numbersBtns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+         const operatorsBtns = ['<', '>', '?', '='];
 
-         const inputsRefs = computed(() => store.state.inputsRefs)
-         const taskResult = computed(() => store.state.taskResult)
-         const correctValues = computed(() => store.state.correctValues)
-         const statistics = computed(() => store.state.statistics)
-         const inputIndex = ref(0)
-         const typeModal = ref('')
+         const inputsRefs = computed(() => store.state.inputsRefs);
+         const taskResult = computed(() => store.state.taskResult);
+         const correctValues = computed(() => store.state.correctValues);
+         const statistics = computed(() => store.state.statistics);
+         const inputIndex = ref(0);
+         const typeModal = ref('');
 
          const compareResult = () => {
             if (useCalculateResult(store.getters.withCustomValuesExample) === taskResult.value) {
-               typeModal.value = 'correct'
-               store.commit('incCompletedExamples')
-               store.commit('incCompletedExamplesRound')
-               localStorage.setItem('statistics', JSON.stringify(statistics.value))
+               typeModal.value = 'correct';
+               store.commit('incCompletedExamples');
+               store.commit('incCompletedExamplesRound');
+               store.commit('incTotalExamples');
+               store.commit('incTotalExamplesRound');
+               localStorage.setItem('statistics', JSON.stringify(statistics.value));
             } else {
-               typeModal.value = 'no-correct'
+               typeModal.value = 'no-correct';
+               store.commit('incTotalExamples');
+               store.commit('incTotalExamplesRound');
+               localStorage.setItem('statistics', JSON.stringify(statistics.value));
             }
-         }
+         };
 
          const showCorrectValues = () => {
             inputsRefs.value.forEach((input: HTMLInputElement, i) => {
-               input.value = correctValues.value[i]
-            })
-            typeModal.value = 'result'
-         }
+               input.value = correctValues.value[i];
+            });
+            typeModal.value = 'result';
+            store.commit('incTotalExamples');
+            store.commit('incTotalExamplesRound');
+            localStorage.setItem('statistics', JSON.stringify(statistics.value));
+         };
 
          const onNumberBtnClick = (e: Event) => {
-            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value]
-            currentInput.value += (e.target as HTMLButtonElement).innerText
-            currentInput.dispatchEvent(new Event('input'))
-            currentInput.focus()
-         }
+            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value];
+            currentInput.value += (e.target as HTMLButtonElement).innerText;
+            currentInput.dispatchEvent(new Event('input'));
+            currentInput.focus();
+         };
 
          const onOperBtnClick = (e: Event) => {
-            const innerText = (e.target as HTMLButtonElement).innerText
+            const innerText = (e.target as HTMLButtonElement).innerText;
             if (innerText === '>' && inputIndex.value < inputsRefs.value.length - 1) {
-               inputIndex.value++
+               inputIndex.value++;
             }
             if (innerText === '<' && inputIndex.value > 0) {
-               inputIndex.value--
+               inputIndex.value--;
             }
             if (innerText === '=') {
-               compareResult()
+               compareResult();
             }
             if (innerText === '?') {
-               showCorrectValues()
+               showCorrectValues();
             }
-            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value]
-            currentInput.focus()
-         }
+            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value];
+            currentInput.focus();
+         };
 
          const nextTask = () => {
-            emit('startApp')
-            typeModal.value = ''
-            store.commit('resetInputsValues')
-            const currentInput: HTMLInputElement = inputsRefs.value[0]
-            currentInput.focus()
-         }
+            emit('startApp');
+            typeModal.value = '';
+            store.commit('resetInputsValues');
+            const currentInput: HTMLInputElement = inputsRefs.value[0];
+            currentInput.focus();
+         };
 
          onMounted(() => {
-            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value]
-            currentInput.focus()
+            const currentInput: HTMLInputElement = inputsRefs.value[inputIndex.value];
+            currentInput.focus();
 
             inputsRefs.value.forEach((input: HTMLInputElement, i) => {
                input.addEventListener('focus', () => {
-                  inputIndex.value = i
-               })
-            })
-         })
+                  inputIndex.value = i;
+               });
+            });
+         });
 
          return {
             numbersBtns,
@@ -117,10 +125,10 @@
             onNumberBtnClick,
             onOperBtnClick,
             nextTask,
-         }
+         };
       },
       components: {OperatorButton, ModalWindow},
-   })
+   });
 </script>
 
 <style scoped>
