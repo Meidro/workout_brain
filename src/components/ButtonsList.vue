@@ -34,6 +34,7 @@
    import store from '@/store';
    import {useCalculateResult} from '@/use/helpers';
    import ModalWindow from './ModalWindow.vue';
+   import {storage} from '@/storage';
 
    export default defineComponent({
       emits: ['startApp'],
@@ -51,16 +52,13 @@
          const compareResult = () => {
             if (useCalculateResult(store.getters.withCustomValuesExample) === taskResult.value) {
                typeModal.value = 'correct';
-               store.commit('incCompletedExamples');
-               store.commit('incCompletedExamplesRound');
+               store.commit('incTotalExamplesCompleted');
                store.commit('incTotalExamples');
-               store.commit('incTotalExamplesRound');
-               localStorage.setItem('statistics', JSON.stringify(statistics.value));
+               storage.setStatistics(statistics.value);
             } else {
                typeModal.value = 'no-correct';
                store.commit('incTotalExamples');
-               store.commit('incTotalExamplesRound');
-               localStorage.setItem('statistics', JSON.stringify(statistics.value));
+               storage.setStatistics(statistics.value);
             }
          };
 
@@ -70,8 +68,7 @@
             });
             typeModal.value = 'result';
             store.commit('incTotalExamples');
-            store.commit('incTotalExamplesRound');
-            localStorage.setItem('statistics', JSON.stringify(statistics.value));
+            storage.setStatistics(statistics.value);
          };
 
          const onNumberBtnClick = (e: Event) => {

@@ -62,21 +62,9 @@ export default createStore({
          state.inputsValues = [];
       },
 
-      // ==================================================
       incTotalExamples(state) {
          state.statistics.totalExamples++;
-      },
-
-      decTotalExamples(state) {
-         state.statistics.totalExamples--;
-      },
-      // ===================================================
-      incTotalExamplesRound(state) {
          state.statistics.lastRound.totalExamplesRound++;
-      },
-
-      decTotalExamplesRound(state) {
-         state.statistics.lastRound.totalExamplesRound--;
       },
 
       resetLastRound(state) {
@@ -86,13 +74,8 @@ export default createStore({
          };
       },
 
-      // ===================================================
-
-      incCompletedExamples(state) {
+      incTotalExamplesCompleted(state) {
          state.statistics.completedExamples++;
-      },
-      // ================================================
-      incCompletedExamplesRound(state) {
          state.statistics.lastRound.completedExamplesRound++;
       },
    },
