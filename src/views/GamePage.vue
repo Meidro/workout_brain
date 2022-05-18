@@ -11,26 +11,21 @@
    import ShowExpression from '@/components/ShowExpression.vue';
    import ButtonsList from '@/components/ButtonsList.vue';
    import {useGenerateTaskElements, useCalculateResult} from '@/use/helpers';
+   import {storage} from '@/storage';
 
    export default defineComponent({
       setup() {
-         const statisticsStr = localStorage.getItem('statistics');
-         if (statisticsStr) {
-            store.commit('setStatistics', JSON.parse(statisticsStr));
-         }
+         const stat = storage.getStatistics();
+         if (stat) store.commit('setStatistics', stat);
 
-         const settingsRangeStr = localStorage.getItem('settingsRange');
-         if (settingsRangeStr) {
-            store.commit('setSettings', JSON.parse(settingsRangeStr));
-         }
+         const rangeSettings = storage.getRangeSettings();
+         if (rangeSettings) store.commit('setRangesValue', rangeSettings);
 
-         const checkboxsStr = localStorage.getItem('checkbox');
-         if (checkboxsStr) {
-            store.commit('setCheckboxValue', JSON.parse(checkboxsStr));
-         }
+         const checkboxsSettings = storage.getCheckboxsSettings();
+         if (checkboxsSettings) store.commit('setCheckboxsValue', checkboxsSettings);
 
-         const checkboxsValue = computed(() => store.state.checkboxValue);
-         const level = computed(() => store.state.settings.complexity).value * 2 + 1;
+         const checkboxsValue = computed(() => store.state.settings.checkboxsValue);
+         const level = computed(() => store.state.settings.rangesValue.complexity).value * 2 + 1;
 
          const start = () => {
             const taskElements = useGenerateTaskElements(checkboxsValue.value, level);

@@ -12,7 +12,7 @@
 
    export default defineComponent({
       setup() {
-         const num = ref(computed(() => store.state.settings.duration).value);
+         const num = ref(computed(() => store.state.settings.rangesValue.duration).value);
          const minutes = ref(num.value < 10 ? '0' + num.value : num.value);
          const seconds = ref('00');
 
@@ -21,6 +21,8 @@
          const timer = () => {
             const deadlineTime = +new Date(new Date().getTime() + num.value * 60 * 1000 + 1000);
             intervalId = setInterval(() => {
+               console.log('tick');
+
                const moment = new Date().getTime();
                const restOfTime = deadlineTime - moment;
                minutes.value = Math.floor((restOfTime % (1000 * 60 * 60)) / (1000 * 60));

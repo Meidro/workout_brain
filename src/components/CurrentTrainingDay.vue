@@ -6,32 +6,26 @@
 
 <script lang="ts">
    import {defineComponent, ref} from 'vue';
-   import {LastTrainingDay} from '@/types';
+   import {LastDay} from '@/types';
+   import {storage} from '@/storage';
 
    export default defineComponent({
       setup() {
          const currentTrainingDay = ref(1);
 
-         const lastDayStr = localStorage.getItem('lastDay');
+         const lastDay: LastDay = storage.getLastDay();
          const currentDay = new Date().toLocaleDateString();
-         if (lastDayStr) {
-            const lastTrainingDay: LastTrainingDay = JSON.parse(lastDayStr);
-            if (lastTrainingDay.date !== currentDay) {
-               currentTrainingDay.value = lastTrainingDay.dayNumber + 1;
-               lastTrainingDay.date = currentDay;
-               lastTrainingDay.dayNumber++;
-               localStorage.setItem('lastDay', JSON.stringify(lastTrainingDay));
+         if (lastDay) {
+            if (lastDay.date !== currentDay) {
+               currentTrainingDay.value = lastDay.dayNumber + 1;
+               lastDay.date = currentDay;
+               lastDay.dayNumber++;
+               storage.setLastDay(lastDay);
             } else {
-               currentTrainingDay.value = lastTrainingDay.dayNumber;
+               currentTrainingDay.value = lastDay.dayNumber;
             }
          } else {
-            localStorage.setItem(
-               'lastDay',
-               JSON.stringify({
-                  date: currentDay,
-                  dayNumber: 1,
-               })
-            );
+            storage.setLastDay({date: currentDay, dayNumber: 1});
          }
 
          return {

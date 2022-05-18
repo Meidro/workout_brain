@@ -18,31 +18,24 @@
    import SettingsRange from '@/components/SettingsRange.vue';
    import SettingsCheckbox from '@/components/SettingsCheckbox.vue';
    import router from '@/router';
+   import {storage} from '@/storage';
 
    export default defineComponent({
       setup() {
-         const statisticsStr = localStorage.getItem('statistics');
-         if (statisticsStr) {
-            store.commit('setStatistics', JSON.parse(statisticsStr));
-         }
+         const stat = storage.getStatistics();
+         if (stat) store.commit('setStatistics', stat);
 
-         const settingsRangeStr = localStorage.getItem('settingsRange');
-         if (settingsRangeStr) {
-            store.commit('setSettings', JSON.parse(settingsRangeStr));
-         }
+         const rangeSettings = storage.getRangeSettings();
+         if (rangeSettings) store.commit('setRangesValue', rangeSettings);
 
-         const checkboxsStr = localStorage.getItem('checkbox');
-         if (checkboxsStr) {
-            store.commit('setCheckboxValue', JSON.parse(checkboxsStr));
-         }
+         const checkboxsSettings = storage.getCheckboxsSettings();
+         if (checkboxsSettings) store.commit('setCheckboxsValue', checkboxsSettings);
 
          const statistics = computed(() => store.state.statistics);
-
          const play = () => {
             router.push('/game');
-            store.commit('resetTotalExamplesRound');
-            store.commit('resetCompletedExamplesRaund');
-            localStorage.setItem('statistics', JSON.stringify(statistics.value));
+            store.commit('resetLastRound');
+            storage.setStatistics(statistics.value);
          };
          return {
             play,

@@ -5,9 +5,9 @@
             <span>1</span>
             <span>15</span>
          </div>
-         <input class="mb-10" type="range" max="15" min="1" v-model="settings.duration" />
+         <input class="mb-10" type="range" max="15" min="1" v-model="rangesValue.duration" />
          <p>
-            Длительность: <span class="changing_data">{{ settings.duration }}</span> минут
+            Длительность: <span class="changing_data">{{ rangesValue.duration }}</span> минут
          </p>
       </div>
       <div class="range__item">
@@ -15,33 +15,34 @@
             <span>1</span>
             <span>10</span>
          </div>
-         <input class="mb-10" type="range" max="10" min="1" v-model="settings.complexity" />
+         <input class="mb-10" type="range" max="10" min="1" v-model="rangesValue.complexity" />
          <p>
-            Сложность: <span class="changing_data">{{ settings.complexity }}</span>
+            Сложность: <span class="changing_data">{{ rangesValue.complexity }}</span>
          </p>
       </div>
    </div>
 </template>
 
 <script lang="ts">
-   import {defineComponent, ref, watch, computed} from 'vue';
+   import {defineComponent, watch, computed} from 'vue';
    import store from '@/store';
+   import {storage} from '@/storage';
 
    export default defineComponent({
       setup() {
-         const settings = ref(computed(() => store.state.settings).value);
+         const rangesValue = computed(() => store.state.settings.rangesValue);
 
          watch(
-            () => settings.value,
+            () => rangesValue.value,
             () => {
-               store.commit('setSettings', settings.value);
-               localStorage.setItem('settingsRange', JSON.stringify(settings.value));
+               store.commit('setRangesValue', rangesValue.value);
+               storage.setRangesValue(rangesValue.value);
             },
             {deep: true}
          );
 
          return {
-            settings,
+            rangesValue,
          };
       },
    });
